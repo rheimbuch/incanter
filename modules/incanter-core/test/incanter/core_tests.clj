@@ -205,8 +205,25 @@
                                      [10 12]])))
   (is (= (sel A :rows [0 1]) (matrix [[1 2 3] 
                                      [4 5 6]])))
-  (is (= (sel A [1 3] [0 2]) (matrix [[4 6] 
-                                      [10 12]]))))
+  (is (= (sel A [1 3] [0 2]) (matrix [[4 6]
+                                      [10 12]])))
+  ;; pass filter function for each row
+  (letfn [(first-even [row]
+            (even? (int (first row))))]
+    (is (= (sel A :filter first-even) (matrix [[4 5 6]
+                                               [10 11 12]])))
+    ;; col selection is applied *after* filtering original matrix
+    (is (= (sel A :cols 0 :filter first-even) (matrix [[4]
+                                                       [10]])))
+    (is (= (sel A :cols [0 1] :filter first-even) (matrix [[4 5]
+                                                           [10 11]])))
+    ;; row selection is applied *after* filtering original matrix
+    (is (= (sel A :rows 1 :filter first-even) (matrix [[10 11 12]])))
+    ;; row and col selection is applied *after* filtering original matrix
+    (is (= (sel A :rows [0 1] :cols [1 2] :filter first-even) (matrix [[5 6]
+                                                                       [11 12]])))
+    )
+  )
 
 (deftest matrix-filter-tests
   ;; filtering: return the rows that sum to more than 6
