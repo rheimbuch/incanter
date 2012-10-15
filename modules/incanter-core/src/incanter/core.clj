@@ -292,7 +292,7 @@
                 cols cols
                 except-cols (except-for (.columns mat) except-cols)
                 :else true)
-         ^Matrix mat (if (nil? filter) mat (matrix (filter filter mat)))
+         ^Matrix mat (if (nil? filter) mat (matrix (clojure.core/filter filter mat)))
          all-rows? (or (true? rows) (= rows :all))
          all-cols? (or (true? cols) (= cols :all))]
      (cond
